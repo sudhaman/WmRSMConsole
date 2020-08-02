@@ -1,0 +1,151 @@
+var sslOption="";
+function selectQueues(frm) 
+{
+  var oneSelected = false;
+  var queuenames = "";
+  var len = frm.availableQueues.length;
+  if( typeof len == "undefined" ) 
+  {
+    // only a single 'availableQueues' option.  length is undefined.
+    queuenames = frm.availableQueues.value;
+    if (frm.selected.checked) 
+    {
+      oneSelected = true;
+    }
+  }
+  else 
+  {
+    for(var i=0; i<len; i++) 
+    {
+      if (frm.availableQueues[i].selected) 
+      {
+         onequeue = frm.availableQueues[i].value;
+         qindx = onequeue.indexOf(" ");
+	 if (qindx > -1)
+	 {
+		onequeue = onequeue.substring(0, qindx);
+	 }
+	 queuenames = queuenames + onequeue + " ";
+         oneSelected = true;
+      }
+    }
+  }
+  //frm.CPROP.queueName.value = queuenames;
+  frm.elements[".CPROP.queueName"].value = queuenames;
+  //alert("selectQueues exiting " + frm.elements[".CPROP.queueName"].value);
+  return oneSelected;
+}
+
+function qMgrChanges(elm) 
+{
+  //alert("qMgrChanges entered" );	
+  if ((elm.name == ".CPROP.qMgrName") ||
+      (elm.name == ".CPROP.hostName") ||
+      (elm.name == ".CPROP.port")     ||
+      (elm.name == ".CPROP.channel")  )
+  {
+      alert("Changes to the Queue Manager properties must be saved before the list of Available Queues can be updated");
+      return true; 
+  }      
+}
+
+function confirmClearContent(sslOption)
+{
+   var s1 = "OK to Clear the SSL Option :`" +sslOption+ "' fields?\n\n";
+   return confirm (s1);
+}
+function showKeystoreAliasParams(frm) 
+{	
+	var clearContent = confirmClearContent(sslOption);
+	if(clearContent){
+	var keystorePath = document.getElementById("sslKeyStore");
+	keystorePath.style.display ="none";
+	keystorePath.value="";
+	var sslKeyStorePassword = document.getElementById("sslKeyStorePassword");
+	sslKeyStorePassword.style.display ="none";
+	sslKeyStorePassword.value="";
+	var retypeSslKeyStorePassword = document.getElementById("retypeSslKeyStorePassword");
+	retypeSslKeyStorePassword.style.display = "none";
+	retypeSslKeyStorePassword.value="";
+	
+	var sslKeyStoreAlias = document.getElementById("sslKeyStoreAlias");
+	sslKeyStoreAlias.style.display ="block";
+	//sslKeyStoreAlias.type="text";
+	var sslTrustStoreAlias = document.getElementById("sslTrustStoreAlias");
+	sslTrustStoreAlias.style.display ="block";
+	//sslTrustStoreAlias.type="text";
+	sslOption = "keystore alias";
+	}else{
+	var sslOptionradio = document.getElementsByName(".CPROP.sslOptions");
+		if(sslOptionradio[0].checked == true){
+			sslOptionradio[1].checked = true;
+			sslOptionradio[0].checked = false;
+		}else{
+		    sslOptionradio[1].checked = false;
+			sslOptionradio[0].checked = true;
+		}
+	  return clearContent;
+	}
+}
+function showKeystoreFileParams(frm) 
+{	
+    var clearContent = confirmClearContent(sslOption);
+	if(clearContent){
+	var sslKeyStoreAlias = document.getElementById("sslKeyStoreAlias");
+	sslKeyStoreAlias.style.display ="none";
+	sslKeyStoreAlias.value="";
+	var sslTrustStoreAlias = document.getElementById("sslTrustStoreAlias");
+	sslTrustStoreAlias.style.display ="none";	
+	sslTrustStoreAlias.value="";
+	
+	var keystorePath = document.getElementById("sslKeyStore");
+	keystorePath.style.display ="block";
+	//keystorePath.type="text";
+	var sslKeyStorePassword = document.getElementById("sslKeyStorePassword");
+	sslKeyStorePassword.style.display ="block";
+	//sslKeyStorePassword.type="password";
+	var retypeSslKeyStorePassword = document.getElementById("retypeSslKeyStorePassword");
+	retypeSslKeyStorePassword.style.display = "block";
+	//retypeSslKeyStorePassword.type="password";
+	sslOption ="keystore file";
+	}else{
+		var sslOptionradio = document.getElementsByName(".CPROP.sslOptions");
+		if(sslOptionradio[0].checked == true){
+			sslOptionradio[1].checked = true;
+			sslOptionradio[0].checked = false;
+		}else{
+		    sslOptionradio[1].checked = false;
+			sslOptionradio[0].checked = true;
+		}
+		return clearContent;
+	}
+}
+
+function useSSlFilepath(idname, password){
+	
+	if(sslOption=='keystore file'){
+		var test = document.getElementById(idname);
+		test.style.display ="block";
+		/*if(password=='pass'){
+			test.type="password";
+		}else{
+			test.type="text";
+		}*/
+	}else{
+		var test = document.getElementById(idname);
+		test.style.display ="none";
+		//test.type="hidden";
+	}
+	}
+function useSSlalias(idname){
+	
+	if(sslOption=='keystore alias'){
+		var test = document.getElementById(idname);
+		test.style.display ="block";
+		//test.type="text";
+	}else{
+		var test = document.getElementById(idname);
+		test.style.display ="none";
+		//test.type="hidden";
+	}
+}
