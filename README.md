@@ -3,7 +3,7 @@
 
 1. Install the package on any one IS
 2. Add servers as remote host  here Settings > Remote Servers
-3. Get to http://<hostname>:<port>/WmRSMConsole/
+3. Get to http://\<hostname\>:\<port\>/WmRSMConsole/
  
  
  
